@@ -3,7 +3,6 @@ import { useAuth } from "@/context/authContext";
 import { Redirect } from "expo-router";
 import { MenuProvider } from "react-native-popup-menu";
 import Hedar from "@/components/Hedar";
-// import { KeyboardProvider } from "react-native-keyboard-controller";
 
 export default function Layout() {
   const { isAuthenticated } = useAuth();

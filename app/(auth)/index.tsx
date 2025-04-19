@@ -22,8 +22,15 @@ import Animated, {
   FadeInRight,
   FadeInUp,
 } from "react-native-reanimated";
+import { useAuth } from "@/context/authContext";
 
 const index = () => {
+
+  const isAthenticated = useAuth();
+  
+  if (isAthenticated) {
+    <Redirect href={'/(app)/home'} />
+  }
   
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -35,7 +42,7 @@ const index = () => {
       <Animated.Image
         entering={FadeInRight.duration(700)}
         className="absolute top-0 left-[-30]"
-        source={require("../assets/images/main_top.png")}
+        source={require("../../assets/images/main_top.png")}
       />
       <Animated.View className={`${Platform.OS === "ios" ? "" : "pt-10"}`}>
         <TouchableOpacity onPress={() => router.push("/(app)/home")}>
@@ -71,7 +78,7 @@ const index = () => {
       </View>
       <Image
         className="absolute bottom-[-150] left-[-10]"
-        source={require("../assets/images/main_bottom.png")}
+        source={require("../../assets/images/main_bottom.png")}
       />
     </SafeAreaView>
   );

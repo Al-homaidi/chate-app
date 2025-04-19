@@ -14,10 +14,13 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../FirbaseConfig";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { router, SplashScreen } from "expo-router";
+
+SplashScreen.preventAutoHideAsync();
 
 interface AuthContextType {
   user: any;
-  isAuthenticated: boolean | undefined;
+  isAuthenticated: any;
   login: (
     email: any,
     password: any
@@ -47,9 +50,7 @@ interface Props {
 
 export const AuthContextProvider = ({ children }: Props) => {
   const [user, setuser] = useState<any | null>(null);
-  const [isAuthenticated, setisAthenticated] = useState<boolean | undefined>(
-    undefined
-  );
+  const [isAuthenticated, setisAthenticated] = useState<any>(undefined);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user: any) => {
@@ -83,6 +84,8 @@ export const AuthContextProvider = ({ children }: Props) => {
   const login = async (email: any, password: any) => {
     try {
       const respons = await signInWithEmailAndPassword(auth, email, password);
+      setisAthenticated(true);
+      router.replace("/(app)/home");
       return { respons: true, success: true };
     } catch (e: any) {
       let msg: any = e.message;
@@ -105,6 +108,7 @@ export const AuthContextProvider = ({ children }: Props) => {
   const logout = async () => {
     try {
       await signOut(auth);
+      setisAthenticated(false);
       return { success: true };
     } catch (e: any) {
       return { success: false, msg: e.message };
@@ -124,14 +128,13 @@ export const AuthContextProvider = ({ children }: Props) => {
         password
       );
 
-      // setuser(response?.user);
-      // setisAthenticated(true);
-
       await setDoc(doc(db, "users", response?.user?.uid), {
         username,
         profileimg,
         userId: response?.user?.uid,
       });
+      setisAthenticated(true);
+      router.replace("/(app)/home");
 
       return { success: true, data: response?.user };
     } catch (e: any) {
@@ -148,6 +151,13 @@ export const AuthContextProvider = ({ children }: Props) => {
       return { success: false, msg };
     }
   };
+
+  useEffect(() => {
+    if (typeof isAuthenticated !== 'undefined') {
+      SplashScreen.hideAsync();
+    }
+  }, [isAuthenticated]);
+  
 
   return (
     <AuthContext.Provider

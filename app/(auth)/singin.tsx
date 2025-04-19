@@ -206,7 +206,7 @@ const singin = () => {
               >
                 Don't have an acount?{" "}
               </Text>
-              <Pressable onPress={() => router.navigate("/(auth)/singup")}>
+              <Pressable onPress={() => router.navigate("/(app)/home")}>
                 <Text
                   style={{ fontSize: hp(1.7), color: "#7035a5" }}
                   className="underline decoration-4 font-bold"
